@@ -83,6 +83,49 @@ public class Tokenizer {
             }
 
             // Operators
+            if (current == '=' || current == '>' || current == '<' || current == '!') {
+                if (current == '=') {
+                    pos++;
+                    tokens.add(new Token(TokenType.OPERATOR, "="));
+                    continue;
+                }
+
+                if (current == '!') {
+                    if (pos + 1 < input.length() && input.charAt(pos + 1) == '=') {
+                        pos += 2;
+                        tokens.add(new Token(TokenType.OPERATOR, "!="));
+                        continue;
+                    } else {
+                        throw new RuntimeException("Unexpected character: " + current);
+                    }
+                }
+
+                if (current == '<') {
+                    if (pos + 1 < input.length() && input.charAt(pos + 1) == '=') {
+                        pos += 2;
+                        tokens.add(new Token(TokenType.OPERATOR, "<="));
+                        continue;
+                    } else {
+                        pos++;
+                        tokens.add(new Token(TokenType.OPERATOR, "<"));
+                        continue;
+                    }
+                }
+
+                if (current == '>') {
+                    if (pos + 1 < input.length() && input.charAt(pos + 1) == '=') {
+                        pos += 2;
+                        tokens.add(new Token(TokenType.OPERATOR, ">="));
+                        continue;
+                    } else {
+                        pos++;
+                        tokens.add(new Token(TokenType.OPERATOR, ">"));
+                        continue;
+                    }
+                }
+            }
+
+            // Numbers
         }
 
         tokens.add(new Token(TokenType.EOF, "EOF"));
