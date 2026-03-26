@@ -25,5 +25,47 @@ public class Tokenizer {
         this.pos = 0;
     }
 
-    
+    public List<Token> tokenize() {
+        List<Token> tokens = new ArrayList<>();
+
+        while (pos < input.length()) {
+            char current = input.charAt(pos);
+
+            // Skip whitespace
+            if (Character.isWhitespace(current)) {
+                pos++;
+                continue;
+            }
+
+            if (current == '(') {
+                tokens.add(new Token(TokenType.LPAREN, "("));
+                pos++;
+                continue;
+            }
+
+            if (current == ')') {
+                tokens.add(new Token(TokenType.RPAREN, ")"));
+                pos++;
+                continue;
+            }
+
+            if (current == '(') {
+                tokens.add(new Token(TokenType.LPAREN, "("));
+                pos++;
+                continue;
+            }
+
+            if (current == ';') {
+                tokens.add(new Token(TokenType.SEMICOLON, ";"));
+                pos++;
+                continue;
+            }
+
+            // String literals
+            
+        }
+
+        tokens.add(new Token(TokenType.EOF, "EOF"));
+        return tokens;
+    }
 }
