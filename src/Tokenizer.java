@@ -1,9 +1,7 @@
 import java.util.*;
 
-import javax.management.RuntimeErrorException;
-
 public class Tokenizer {
-    
+
     private static final Set<String> KEYWORDS = new HashSet<>();
 
     static {
@@ -18,7 +16,7 @@ public class Tokenizer {
             KEYWORDS.add(word);
         }
     }
-    
+
     private final String input;
     private int pos;
 
@@ -51,8 +49,8 @@ public class Tokenizer {
                 continue;
             }
 
-            if (current == '(') {
-                tokens.add(new Token(TokenType.LPAREN, "("));
+            if (current == ',') {
+                tokens.add(new Token(TokenType.COMMA, ","));
                 pos++;
                 continue;
             }
@@ -77,7 +75,7 @@ public class Tokenizer {
                 }
 
                 String value = input.substring(start, pos);
-                pos ++;
+                pos++;
                 tokens.add(new Token(TokenType.STRING_LITERAL, value));
                 continue;
             }
@@ -149,10 +147,35 @@ public class Tokenizer {
                     tokens.add(new Token(TokenType.INTEGER_LITERAL, number));
                 }
                 continue;
-        }
-    }
+            }
 
-    // Words
+            // Words
+            if (Character.isLetter(current) || current == '_') {
+                int start = pos;
+
+                while (pos < input.length()) {
+                    char c = input.charAt(pos);
+                    if (Character.isLetterOrDigit(c) || c == '_' || c == '.') {
+                        pos++;
+                    } else {
+                        break;
+                    }
+                }
+
+                String word = input.substring(start, pos);
+                String upper = word.toUpperCase();
+
+                if (KEYWORDS.contains(upper)) {
+                    tokens.add(new Token(TokenType.KEYWORD, upper));
+                } else {
+                    tokens.add(new Token(TokenType.IDENTIFIER, word));
+                }
+
+                continue;
+            }
+
+            throw new RuntimeException("Unexpected character: " + current);
+        }
 
         tokens.add(new Token(TokenType.EOF, "EOF"));
         return tokens;
