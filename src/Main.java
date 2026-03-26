@@ -1,4 +1,3 @@
-// Main
 import java.util.Scanner;
 
 public class Main {
@@ -11,22 +10,31 @@ public class Main {
         System.out.println("DBMS started. Type EXIT; to quit.");
 
         while (true) {
-
             String line = scanner.nextLine();
             buffer.append(line).append(" ");
 
             if (buffer.toString().contains(";")) {
 
-                String statement = buffer.toString();
+                String statement = buffer.toString().trim();
                 buffer.setLength(0);
-
-                statement = statement.trim();
 
                 System.out.println("Received statement: " + statement);
 
                 if (statement.equalsIgnoreCase("EXIT;")) {
                     System.out.println("Exiting DBMS.");
                     break;
+                }
+
+                try {
+                    Tokenizer tokenizer = new Tokenizer(statement);
+                    List<Token> tokens = tokenizer.tokenize();
+
+                    System.out.println("Tokens:");
+                    for (Token token : tokens) {
+                        System.out.println(token);
+                    }
+                } catch (RuntimeException e) {
+                    System.out.println("Tokenizer error: " + e.getMessage());
                 }
             }
         }

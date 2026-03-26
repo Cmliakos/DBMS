@@ -16,6 +16,14 @@ public class Tokenizer {
             KEYWORDS.add(word);
         }
     }
+    
+    private final String input;
+    private int pos;
+
+    public Tokenizer(String input) {
+        this.input = input;
+        this.pos = 0;
+    }
 
     
 }
