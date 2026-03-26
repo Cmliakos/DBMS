@@ -2,8 +2,8 @@ import java.util.Scanner;
 import java.util.List;
 
 public class Main {
-    
-   public static void main(String[] args) {
+
+    public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
         StringBuilder buffer = new StringBuilder();
@@ -12,18 +12,21 @@ public class Main {
 
         while (true) {
             String line = scanner.nextLine();
-            buffer.append(line).append(" ");
+            buffer.append(line).append("\n");
 
-            if (buffer.toString().contains(";")) {
+            while (buffer.indexOf(";") != -1) {
+                int semicolonIndex = buffer.indexOf(";");
 
-                String statement = buffer.toString().trim();
-                buffer.setLength(0);
+                String statement = buffer.substring(0, semicolonIndex + 1).trim();
+
+                buffer.delete(0, semicolonIndex + 1);
 
                 System.out.println("Received statement: " + statement);
 
                 if (statement.equalsIgnoreCase("EXIT;")) {
                     System.out.println("Exiting DBMS.");
-                    break;
+                    scanner.close();
+                    return;
                 }
 
                 try {
@@ -39,7 +42,5 @@ public class Main {
                 }
             }
         }
-
-        scanner.close();
-   }
+    }
 }
