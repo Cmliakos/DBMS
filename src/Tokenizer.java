@@ -126,7 +126,33 @@ public class Tokenizer {
             }
 
             // Numbers
+            if (Character.isDigit(current)) {
+                int start = pos;
+                boolean hasDot = false;
+
+                while (pos < input.length()) {
+                    char c = input.charAt(pos);
+                    if (Character.isDigit(c)) {
+                        pos++;
+                    } else if (c == '.' && !hasDot) {
+                        hasDot = true;
+                        pos++;
+                    } else {
+                        break;
+                    }
+                }
+
+                String number = input.substring(start, pos);
+                if (hasDot) {
+                    tokens.add(new Token(TokenType.FLOAT_LITERAL, number));
+                } else {
+                    tokens.add(new Token(TokenType.INTEGER_LITERAL, number));
+                }
+                continue;
         }
+    }
+
+    // Words
 
         tokens.add(new Token(TokenType.EOF, "EOF"));
         return tokens;
