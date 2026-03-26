@@ -1,5 +1,7 @@
 import java.util.*;
 
+import javax.management.RuntimeErrorException;
+
 public class Tokenizer {
     
     private static final Set<String> KEYWORDS = new HashSet<>();
@@ -62,7 +64,25 @@ public class Tokenizer {
             }
 
             // String literals
-            
+            if (current == '"') {
+                pos++;
+                int start = pos;
+
+                while (pos < input.length() && input.charAt(pos) != '"') {
+                    pos++;
+                }
+
+                if (pos >= input.length()) {
+                    throw new RuntimeException("Unterminated string literal");
+                }
+
+                String value = input.substring(start, pos);
+                pos ++;
+                tokens.add(new Token(TokenType.STRING_LITERAL, value));
+                continue;
+            }
+
+            // Operators
         }
 
         tokens.add(new Token(TokenType.EOF, "EOF"));
