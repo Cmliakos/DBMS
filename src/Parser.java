@@ -36,4 +36,57 @@ public class Parser {
 
         throw new RuntimeException("Unexpected token: " + peek());
     }
+
+    private boolean matchKeyword(String keyword) {
+        if (check(TokenType.KEYWORD) && peek().getValue().equalsIgnoreCase(keyword)) {
+            advance();
+            return true;
+        }
+        return false;
+    }
+
+    privte boolean check(TokenType type) {
+        if (isAtEnd()) return false;
+        return peek().getType() == type;
+    }
+
+    private Token advance() {
+        if (!isAtEnd()) current++;
+        return previous();
+    }
+
+    private boolean isAtEnd() {
+        return peek().getType() == TokenType.EOF;
+    }
+
+    private Token peek() {
+        return tokens.get(current);
+    }
+
+    private Token previous() {
+        return tokens.get(current - 1);
+    }
+
+    private void expect(TokenType type, String message) {
+        if (check(type)) {
+            advance();
+            return;
+        }
+        throw new RuntimeException(message + " at token: " + peek());
+    }
+
+    private void expectKeyword(String keyword, String message) {
+        if (check(TokenType.KEYWORD) && peek().getValue().equalsIgnoreCase(keyword)) {
+            advance();
+            return;
+        }
+        throw new RuntimeException(message + " at token: " + peek());
+    }
+
+    private String expectIdentifier(String message) {
+        if (check(TokenType.IDENTIFIER)) {
+            return advance().getValue();
+        }
+        throw new RuntimeException(message + " at token: " + peek());
+    }
 }
