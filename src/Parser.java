@@ -45,7 +45,7 @@ public class Parser {
         return false;
     }
 
-    privte boolean check(TokenType type) {
+    private boolean check(TokenType type) {
         if (isAtEnd()) return false;
         return peek().getType() == type;
     }
