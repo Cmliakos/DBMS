@@ -108,6 +108,17 @@ public class Parser {
         return new UseCommand(dbName);
     }
 
+    private Command parseDescribe() {
+        if (matchKeyword("ALL")) {
+            expect(TokenType.SEMICOLON, "Expected ';' after DESCRIBE ALL");
+            return new DescribeCommand(true, null);
+        } else {
+            String tableName = expectIdentifier("Expected table name after DESCRIBE");
+            expect(TokenType.SEMICOLON, "Expected ';' after DESCRIBE statement");
+            return new DescribeCommand(false, tableName);
+        }
+    }
+
     private Command parseExit() {
         expect(TokenType.SEMICOLON, "Expected ';' after EXIT");
         return new ExitCommand();
