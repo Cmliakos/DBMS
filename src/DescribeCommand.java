@@ -1,7 +1,14 @@
 public class DescribeCommand extends Command {
+    private final boolean describeAll;
     private final String tableName;
 
-    public DescribeCommand(String tableName) {
+    public DescribeCommand(boolean describeAll, String tableName) {
+        this.describeAll = describeAll;
         this.tableName = tableName;
+    }
+
+    @Override
+    public String toString() {
+        return "DescribeCommand{describeAll=" + describeAll + ", tableName='" + tableName + "'}";
     }
 }
