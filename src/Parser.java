@@ -12,25 +12,35 @@ public class Parser {
     public Command parseStatement() {
         if (matchKeyword("CREATE")) {
             return parseCreate();
-        } if (matchKeyword("USE")) {
+        }
+        if (matchKeyword("USE")) {
             return parseUse();
-        } if (matchKeyword("DESCRIBE")) {
+        }
+        if (matchKeyword("DESCRIBE")) {
             return parseDescribe();
-        } if (matchKeyword("INSERT")) {
+        }
+        if (matchKeyword("INSERT")) {
             return parseInsert();
-        } if (matchKeyword("UPDATE")) {
+        }
+        if (matchKeyword("UPDATE")) {
             return parseUpdate();
-        } if (matchKeyword("SELECT")) {
+        }
+        if (matchKeyword("SELECT")) {
             return parseSelect();
-        } if (matchKeyword("DELETE")) {
+        }
+        if (matchKeyword("DELETE")) {
             return parseDelete();
-        } if (matchKeyword("RENAME")) {
+        }
+        if (matchKeyword("RENAME")) {
             return parseRename();
-        } if (matchKeyword("LET")) {
+        }
+        if (matchKeyword("LET")) {
             return parseLet();
-        } if (matchKeyword("INPUT")) {
+        }
+        if (matchKeyword("INPUT")) {
             return parseInput();
-        } if (matchKeyword("EXIT")) {
+        }
+        if (matchKeyword("EXIT")) {
             return parseExit();
         }
 
@@ -46,12 +56,14 @@ public class Parser {
     }
 
     private boolean check(TokenType type) {
-        if (isAtEnd()) return false;
+        if (isAtEnd())
+            return false;
         return peek().getType() == type;
     }
 
     private Token advance() {
-        if (!isAtEnd()) current++;
+        if (!isAtEnd())
+            current++;
         return previous();
     }
 
@@ -89,4 +101,16 @@ public class Parser {
         }
         throw new RuntimeException(message + " at token: " + peek());
     }
+
+    private Command parseUse() {
+        String dbName = expectIdentifier("Expected database name after USE");
+        expect(TokenType.SEMICOLON, "Expected ';' after USE statement");
+        return new UseCommand(dbName);
+    }
+
+    private Command parseExit() {
+        expect(TokenType.SEMICOLON, "Expected ';' after EXIT");
+        return new ExitCommand();
+    }
+
 }
