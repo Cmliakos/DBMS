@@ -173,7 +173,7 @@ public class Parser {
     }
 
     private Command parseInsert() {
-        String tableName = expectIdentifier("Expected table name after INSERT INTO");
+        String tableName = expectIdentifier("Expected table name after INSERT");
         expectKeyword("VALUES", "Expected 'VALUES' after table name in INSERT statement");
         expect(TokenType.LPAREN, "Expected '(' after VALUES in INSERT statement");
         
@@ -206,6 +206,34 @@ public class Parser {
         throw new RuntimeException("Expected literal value");
     }
 
+    private Command parseSelect() {
+        List<String> attrNames = new ArrayList<>();
+        do {
+            attrNames.add(expectIdentifier("Expected attribute name in SELECT"));
+            if (check(TokenType.COMMA)) {
+                advance();
+            } else {
+                break;
+            }
+        } while (true);
+        expectKeyword("FROM", "Expected 'FROM' after attribute list in SELECT");
+        List<String> tableNames = new ArrayList<>();
+        do {
+            tableNames.add(expectIdentifier("Expected table name in FROM clause"));
+            if (check(TokenType.COMMA)) {
+                advance();
+            } else {
+                break;
+            }
+        } while (true);
+        Condition condition = null;
+        if (matchKeyword("WHERE")) {
+            condition = parseCondition();
+        }
+        expect(TokenType.SEMICOLON, "Expected ';' after SELECT statement");
+        return new SelectCommand(attrNames, tableNames, condition);
+    }
+
     private Command parseRename() {
         String tableName = expectIdentifier("Expected table name after RENAME");
         expect(TokenType.LPAREN, "Expected '(' after table name in RENAME");
@@ -221,6 +249,32 @@ public class Parser {
         expect(TokenType.RPAREN, "Expected ')' after attribute list in RENAME");
         expect(TokenType.SEMICOLON, "Expected ';' after RENAME statement");
         return new RenameCommand(tableName, newAttrNames);
+    }
+
+    private Command parseUpdate() {
+        String tableName = expectIdentifier("Expected table name after UPDATE");
+        expectKeyword("SET", "Expected 'SET' after table name in UPDATE");
+        List<String> columnNames = new ArrayList<>();
+        List<Value> newValues = new ArrayList<>();
+        do {
+            columnNames.add(expectIdentifier("Expected column name in SET clause"));
+            if (!check(TokenType.OPERATOR) || !peek().getValue().equals("=")) {
+                throw new RuntimeException("Expected '=' after column name in UPDATE at token: " + peek());
+            }
+            advance();
+            newValues.add(parseValue());
+            if (check(TokenType.COMMA)) {
+                advance();
+            } else {
+                break;
+            }
+        } while (true);
+        Condition condition = null;
+        if (matchKeyword("WHERE")) {
+            condition = parseCondition();
+        }
+        expect(TokenType.SEMICOLON, "Expected ';' after UPDATE statement");
+        return new UpdateCommand(tableName, columnNames, newValues, condition);
     }
 
     private Command parseDelete() {
@@ -276,6 +330,25 @@ public class Parser {
         } else {
             throw new RuntimeException("Expected value or attribute name in condition at token: " + peek());
         }
+    }
+
+    private Command parseInput() {
+        String inputFile = expectIdentifier("Expected file name after INPUT");
+        String outputFile = null;
+        if (matchKeyword("OUTPUT")) {
+            outputFile = expectIdentifier("Expected file name after OUTPUT");
+        }
+        expect(TokenType.SEMICOLON, "Expected ';' after INPUT statement");
+        return new InputCommand(inputFile, outputFile);
+    }
+
+    private Command parseLet() {
+        String tableName = expectIdentifier("Expected table name after LET");
+        expectKeyword("KEY", "Expected 'KEY' after table name in LET");
+        String keyAttr = expectIdentifier("Expected attribute name after KEY in LET");
+        expectKeyword("SELECT", "Expected 'SELECT' after key attribute in LET");
+        SelectCommand select = (SelectCommand) parseSelect();
+        return new LetCommand(tableName, keyAttr, select);
     }
 
     private Command parseExit() {

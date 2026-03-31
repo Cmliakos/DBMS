@@ -21,24 +21,19 @@ public class Main {
 
                 buffer.delete(0, semicolonIndex + 1);
 
-                System.out.println("Received statement: " + statement);
-
-                if (statement.equalsIgnoreCase("EXIT;")) {
-                    System.out.println("Exiting DBMS.");
-                    scanner.close();
-                    return;
-                }
-
                 try {
                     Tokenizer tokenizer = new Tokenizer(statement);
                     List<Token> tokens = tokenizer.tokenize();
-
-                    System.out.println("Tokens:");
-                    for (Token token : tokens) {
-                        System.out.println(token);
+                    Parser parser = new Parser(tokens);
+                    Command command = parser.parseStatement();
+                    if (command instanceof ExitCommand) {
+                        System.out.println("Exiting DBMS.");
+                        scanner.close();
+                        return;
                     }
+                    System.out.println("Parsed: " + command);
                 } catch (RuntimeException e) {
-                    System.out.println("Tokenizer error: " + e.getMessage());
+                    System.out.println("Error: " + e.getMessage());
                 }
             }
         }
