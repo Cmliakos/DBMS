@@ -332,6 +332,15 @@ public class Parser {
         }
     }
 
+    private Command parseLet() {
+        String tableName = expectIdentifier("Expected table name after LET");
+        expectKeyword("KEY", "Expected 'KEY' after table name in LET");
+        String keyAttr = expectIdentifier("Expected attribute name after KEY in LET");
+        expectKeyword("SELECT", "Expected 'SELECT' after key attribute in LET");
+        SelectCommand select = (SelectCommand) parseSelect();
+        return new LetCommand(tableName, keyAttr, select);
+    }
+
     private Command parseExit() {
         expect(TokenType.SEMICOLON, "Expected ';' after EXIT");
         return new ExitCommand();
