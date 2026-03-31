@@ -13,6 +13,11 @@ public class UpdateCommand extends Command {
         this.condition = condition;
     }
 
+    public String getTableName() { return tableName; }
+    public List<String> getColumnNames() { return columnNames; }
+    public List<Value> getNewValues() { return newValues; }
+    public Condition getCondition() { return condition; }
+
     @Override
     public String toString() {
         return "UpdateCommand{tableName='" + tableName + "', columnNames=" + columnNames
