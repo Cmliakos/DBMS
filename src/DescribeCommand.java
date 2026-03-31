@@ -8,6 +8,11 @@ public class DescribeCommand extends Command {
     }
 
     @Override
+    public void execute() {
+        System.out.println("Command not yet implemented.");
+    }
+
+    @Override
     public String toString() {
         return "DescribeCommand{describeAll=" + describeAll + ", tableName='" + tableName + "'}";
     }

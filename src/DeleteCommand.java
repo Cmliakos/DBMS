@@ -8,6 +8,11 @@ public class DeleteCommand extends Command {
     }
 
     @Override
+    public void execute() {
+        System.out.println("Command not yet implemented.");
+    }
+
+    @Override
     public String toString() {
         return "DeleteCommand{tableName='" + tableName + "', condition=" + condition + "}";
     }

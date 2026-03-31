@@ -10,6 +10,11 @@ public class CreateTableCommand extends Command {
     }
 
     @Override
+    public void execute() {
+        System.out.println("Command not yet implemented.");
+    }
+
+    @Override
     public String toString() {
         return "CreateTableCommand{tableName='" + tableName + "', columns=" + columns + '}';
     }

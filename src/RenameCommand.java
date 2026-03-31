@@ -10,6 +10,11 @@ public class RenameCommand extends Command {
     }
 
     @Override
+    public void execute() {
+        System.out.println("Command not yet implemented.");
+    }
+
+    @Override
     public String toString() {
         return "RenameCommand{tableName='" + tableName + "', newAttrNames=" + newAttrNames + "}";
     }

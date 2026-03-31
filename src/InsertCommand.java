@@ -10,6 +10,11 @@ public class InsertCommand extends Command {
     }
 
     @Override
+    public void execute() {
+        System.out.println("Command not yet implemented.");
+    }
+
+    @Override
     public String toString() {
         return "InsertCommand{tableName='" + tableName + "', values=" + values + "}";
     }

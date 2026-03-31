@@ -10,6 +10,11 @@ public class LetCommand extends Command {
     }
 
     @Override
+    public void execute() {
+        System.out.println("Command not yet implemented.");
+    }
+
+    @Override
     public String toString() {
         return "LetCommand{tableName='" + tableName + "', keyAttr='" + keyAttr + "', select=" + select + "}";
     }
