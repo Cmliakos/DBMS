@@ -11,6 +11,11 @@ public class InputCommand extends Command {
     public String getOutputFile() { return outputFile; }
 
     @Override
+    public void execute() {
+        System.out.println("Command not yet implemented.");
+    }
+
+    @Override
     public String toString() {
         return "InputCommand{inputFile='" + inputFile + "', outputFile='" + outputFile + "'}";
     }

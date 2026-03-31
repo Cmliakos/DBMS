@@ -3,12 +3,14 @@ import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static String currentDatabase = null;
 
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         StringBuilder buffer = new StringBuilder();
 
         System.out.println("DBMS started. Type EXIT; to quit.");
+
 
         while (true) {
             String line = scanner.nextLine();
@@ -32,6 +34,7 @@ public class Main {
                         return;
                     }
                     System.out.println("Parsed: " + command);
+                    command.execute();
                 } catch (RuntimeException e) {
                     System.out.println("Error: " + e.getMessage());
                 }

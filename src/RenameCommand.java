@@ -13,6 +13,11 @@ public class RenameCommand extends Command {
     public List<String> getNewAttrNames() { return newAttrNames; }
 
     @Override
+    public void execute() {
+        System.out.println("Command not yet implemented.");
+    }
+
+    @Override
     public String toString() {
         return "RenameCommand{tableName='" + tableName + "', newAttrNames=" + newAttrNames + "}";
     }

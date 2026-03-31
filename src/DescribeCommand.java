@@ -11,6 +11,11 @@ public class DescribeCommand extends Command {
     public String getTableName() { return tableName; }
 
     @Override
+    public void execute() {
+        System.out.println("Command not yet implemented.");
+    }
+
+    @Override
     public String toString() {
         return "DescribeCommand{describeAll=" + describeAll + ", tableName='" + tableName + "'}";
     }

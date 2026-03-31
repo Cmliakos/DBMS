@@ -19,6 +19,11 @@ public class UpdateCommand extends Command {
     public Condition getCondition() { return condition; }
 
     @Override
+    public void execute() {
+        System.out.println("Command not yet implemented.");
+    }
+
+    @Override
     public String toString() {
         return "UpdateCommand{tableName='" + tableName + "', columnNames=" + columnNames
                 + ", newValues=" + newValues + ", condition=" + condition + "}";
