@@ -142,7 +142,7 @@ public class Parser {
             String columnName = expectIdentifier("Expected column name");
             String columnType = parseType();
             boolean isPrimaryKey = false;
-            if (matchKeyword("PRIMARY")) {
+            if (columns.isEmpty() && matchKeyword("PRIMARY")) {
                 expectKeyword("KEY", "Expected 'KEY' after 'PRIMARY'");
                 isPrimaryKey = true;
             }
@@ -198,12 +198,67 @@ public class Parser {
             return new Value("INTEGER", advance().getValue());
         }
         if (check(TokenType.STRING_LITERAL)) {
-            return new Value("STRING", advance().getValue());
+            return new Value("TEXT", advance().getValue());
         }
         if (check(TokenType.FLOAT_LITERAL)) {
             return new Value("FLOAT", advance().getValue());
         }
         throw new RuntimeException("Expected literal value");
+    }
+
+    private Command parseDelete() {
+        String tableName = expectIdentifier("Expected table name after DELETE");
+        Condition condition = null;
+        if (matchKeyword("WHERE")) {
+            condition = parseCondition();
+        }
+        expect(TokenType.SEMICOLON, "Expected ';' after DELETE statement");
+        return new DeleteCommand(tableName, condition);
+    }
+
+    private Condition parseCondition() {
+        List<String> leftAttrs = new ArrayList<>();
+        List<String> ops = new ArrayList<>();
+        List<String> rights = new ArrayList<>();
+        List<Boolean> rightIsAttrs = new ArrayList<>();
+        List<String> connectives = new ArrayList<>();
+
+        parsePredicate(leftAttrs, ops, rights, rightIsAttrs);
+
+        while (connectives.size() < 2 && check(TokenType.KEYWORD) &&
+                (peek().getValue().equalsIgnoreCase("AND") || peek().getValue().equalsIgnoreCase("OR"))) {
+            connectives.add(advance().getValue().toUpperCase());
+            parsePredicate(leftAttrs, ops, rights, rightIsAttrs);
+        }
+
+        return new Condition(leftAttrs, ops, rights, rightIsAttrs, connectives);
+    }
+
+    private void parsePredicate(List<String> leftAttrs, List<String> ops,
+                                 List<String> rights, List<Boolean> rightIsAttrs) {
+        String left = expectIdentifier("Expected attribute name in condition");
+        if (!check(TokenType.OPERATOR)) {
+            throw new RuntimeException("Expected relational operator in condition at token: " + peek());
+        }
+        String op = advance().getValue();
+        leftAttrs.add(left);
+        ops.add(op);
+
+        if (check(TokenType.INTEGER_LITERAL)) {
+            rights.add(advance().getValue());
+            rightIsAttrs.add(false);
+        } else if (check(TokenType.FLOAT_LITERAL)) {
+            rights.add(advance().getValue());
+            rightIsAttrs.add(false);
+        } else if (check(TokenType.STRING_LITERAL)) {
+            rights.add(advance().getValue());
+            rightIsAttrs.add(false);
+        } else if (check(TokenType.IDENTIFIER)) {
+            rights.add(advance().getValue());
+            rightIsAttrs.add(true);
+        } else {
+            throw new RuntimeException("Expected value or attribute name in condition at token: " + peek());
+        }
     }
 
     private Command parseExit() {
