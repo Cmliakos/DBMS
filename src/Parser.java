@@ -173,7 +173,7 @@ public class Parser {
     }
 
     private Command parseInsert() {
-        String tableName = expectIdentifier("Expected table name after INSERT INTO");
+        String tableName = expectIdentifier("Expected table name after INSERT");
         expectKeyword("VALUES", "Expected 'VALUES' after table name in INSERT statement");
         expect(TokenType.LPAREN, "Expected '(' after VALUES in INSERT statement");
         
@@ -221,6 +221,32 @@ public class Parser {
         expect(TokenType.RPAREN, "Expected ')' after attribute list in RENAME");
         expect(TokenType.SEMICOLON, "Expected ';' after RENAME statement");
         return new RenameCommand(tableName, newAttrNames);
+    }
+
+    private Command parseUpdate() {
+        String tableName = expectIdentifier("Expected table name after UPDATE");
+        expectKeyword("SET", "Expected 'SET' after table name in UPDATE");
+        List<String> columnNames = new ArrayList<>();
+        List<Value> newValues = new ArrayList<>();
+        do {
+            columnNames.add(expectIdentifier("Expected column name in SET clause"));
+            if (!check(TokenType.OPERATOR) || !peek().getValue().equals("=")) {
+                throw new RuntimeException("Expected '=' after column name in UPDATE at token: " + peek());
+            }
+            advance();
+            newValues.add(parseValue());
+            if (check(TokenType.COMMA)) {
+                advance();
+            } else {
+                break;
+            }
+        } while (true);
+        Condition condition = null;
+        if (matchKeyword("WHERE")) {
+            condition = parseCondition();
+        }
+        expect(TokenType.SEMICOLON, "Expected ';' after UPDATE statement");
+        return new UpdateCommand(tableName, columnNames, newValues, condition);
     }
 
     private Command parseDelete() {
