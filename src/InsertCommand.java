@@ -9,6 +9,9 @@ public class InsertCommand extends Command {
         this.values = values;
     }
 
+    public String getTableName() { return tableName; }
+    public List<Value> getValues() { return values; }
+
     @Override
     public void execute() {
         System.out.println("Command not yet implemented.");

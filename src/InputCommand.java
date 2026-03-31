@@ -7,6 +7,9 @@ public class InputCommand extends Command {
         this.outputFile = outputFile;
     }
 
+    public String getInputFile() { return inputFile; }
+    public String getOutputFile() { return outputFile; }
+
     @Override
     public void execute() {
         System.out.println("Command not yet implemented.");

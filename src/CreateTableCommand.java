@@ -9,6 +9,9 @@ public class CreateTableCommand extends Command {
         this.columns = columns;
     }
 
+    public String getTableName() { return tableName; }
+    public List<ColumnDef> getColumns() { return columns; }
+
     @Override
     public void execute() {
         System.out.println("Command not yet implemented.");

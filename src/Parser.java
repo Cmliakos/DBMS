@@ -98,7 +98,7 @@ public class Parser {
 
     private String expectIdentifier(String message) {
         if (check(TokenType.IDENTIFIER)) {
-            return advance().getValue();
+            return advance().getValue().toLowerCase();
         }
         throw new RuntimeException(message + " at token: " + peek());
     }

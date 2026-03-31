@@ -9,6 +9,9 @@ public class RenameCommand extends Command {
         this.newAttrNames = newAttrNames;
     }
 
+    public String getTableName() { return tableName; }
+    public List<String> getNewAttrNames() { return newAttrNames; }
+
     @Override
     public void execute() {
         System.out.println("Command not yet implemented.");

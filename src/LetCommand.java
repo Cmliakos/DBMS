@@ -9,6 +9,10 @@ public class LetCommand extends Command {
         this.select = select;
     }
 
+    public String getTableName() { return tableName; }
+    public String getKeyAttr() { return keyAttr; }
+    public SelectCommand getSelect() { return select; }
+
     @Override
     public void execute() {
         System.out.println("Command not yet implemented.");

@@ -7,6 +7,9 @@ public class DescribeCommand extends Command {
         this.tableName = tableName;
     }
 
+    public boolean isDescribeAll() { return describeAll; }
+    public String getTableName() { return tableName; }
+
     @Override
     public void execute() {
         System.out.println("Command not yet implemented.");
