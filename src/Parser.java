@@ -206,6 +206,23 @@ public class Parser {
         throw new RuntimeException("Expected literal value");
     }
 
+    private Command parseRename() {
+        String tableName = expectIdentifier("Expected table name after RENAME");
+        expect(TokenType.LPAREN, "Expected '(' after table name in RENAME");
+        List<String> newAttrNames = new ArrayList<>();
+        do {
+            newAttrNames.add(expectIdentifier("Expected attribute name in RENAME"));
+            if (check(TokenType.COMMA)) {
+                advance();
+            } else {
+                break;
+            }
+        } while (true);
+        expect(TokenType.RPAREN, "Expected ')' after attribute list in RENAME");
+        expect(TokenType.SEMICOLON, "Expected ';' after RENAME statement");
+        return new RenameCommand(tableName, newAttrNames);
+    }
+
     private Command parseDelete() {
         String tableName = expectIdentifier("Expected table name after DELETE");
         Condition condition = null;
