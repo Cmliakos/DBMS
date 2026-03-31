@@ -33,7 +33,6 @@ public class Main {
                         scanner.close();
                         return;
                     }
-                    System.out.println("Parsed: " + command);
                     command.execute();
                 } catch (RuntimeException e) {
                     System.out.println("Error: " + e.getMessage());

@@ -7,10 +7,10 @@ public class CreateDatabaseCommand extends Command {
         this.databaseName = databaseName;
     }
 
-     @Override
+    public String getDatabaseName() { return databaseName; }
+
+    @Override
     public void execute() {
-        // create a folder
-        // TODO fix directory not being created under data folder
         File databaseDirectory = new File("../data/" + databaseName);
 
         // handle if file exists
