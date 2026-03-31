@@ -1,0 +1,14 @@
+public class InputCommand extends Command {
+    private final String inputFile;
+    private final String outputFile; // null if no OUTPUT clause
+
+    public InputCommand(String inputFile, String outputFile) {
+        this.inputFile = inputFile;
+        this.outputFile = outputFile;
+    }
+
+    @Override
+    public String toString() {
+        return "InputCommand{inputFile='" + inputFile + "', outputFile='" + outputFile + "'}";
+    }
+}

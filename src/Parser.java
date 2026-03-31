@@ -332,6 +332,16 @@ public class Parser {
         }
     }
 
+    private Command parseInput() {
+        String inputFile = expectIdentifier("Expected file name after INPUT");
+        String outputFile = null;
+        if (matchKeyword("OUTPUT")) {
+            outputFile = expectIdentifier("Expected file name after OUTPUT");
+        }
+        expect(TokenType.SEMICOLON, "Expected ';' after INPUT statement");
+        return new InputCommand(inputFile, outputFile);
+    }
+
     private Command parseLet() {
         String tableName = expectIdentifier("Expected table name after LET");
         expectKeyword("KEY", "Expected 'KEY' after table name in LET");
