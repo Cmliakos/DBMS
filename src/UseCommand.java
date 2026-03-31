@@ -5,5 +5,8 @@ public class UseCommand extends Command {
         this.databaseName = databaseName;
     }
 
-    
+    @Override
+    public String toString() {
+        return "UseCommand{databaseName='" + databaseName + "'}";
+    }
 }

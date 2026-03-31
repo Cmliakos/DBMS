@@ -147,31 +147,37 @@ public class Parser {
                 isPrimaryKey = true;
             }
             columns.add(new ColumnDef(columnName, columnType, isPrimaryKey));
-        } while (matchKeyword("COMMA"));
-        expect(TokenType.RPAREN, "Expected ')' after column definitions");
-        expect(TokenType.SEMICOLON, "Expected ';' after CREATE TABLE");
+
+        if (check(TokenType.COMMA)) {
+            advance();
+        } else {
+            break;
+        } 
+    } while (true);
+        expect(TokenType.RPAREN, "Expected ')' after column definitions in CREATE TABLE");
+        expect(TokenType.SEMICOLON, "Expected ';' after CREATE TABLE statement");
         return new CreateTableCommand(tableName, columns);
     }
 
     private String parseType() {
-        if (matchKeyword("INT")) {
-            return "INT";
+        if (matchKeyword("INTEGER")) {
+            return "INTEGER";
         }
-        if (matchKeyword("STRING")) {
-            return "STRING";
+        if (matchKeyword("TEXT")) {
+            return "TEXT";
         }
         if (matchKeyword("FLOAT")) {
             return "FLOAT";
         }
-        throw new RuntimeException("Expected data type INT, STRING, or FLOAT");
+        throw new RuntimeException("Expected data type INTEGER, TEXT, or FLOAT");
     }
 
     private Command parseInsert() {
         String tableName = expectIdentifier("Expected table name after INSERT INTO");
         expectKeyword("VALUES", "Expected 'VALUES' after table name in INSERT statement");
-        expect(TokenType.LPAREN, "Expected '(' after VALUES in INSERT statement")
+        expect(TokenType.LPAREN, "Expected '(' after VALUES in INSERT statement");
         
-        List<Value> values = new ArrayList<>()
+        List<Value> values = new ArrayList<>();
         
         do {
             values.add(parseValue());

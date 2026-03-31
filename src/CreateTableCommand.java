@@ -1,0 +1,16 @@
+import java.util.List;
+
+public class CreateTableCommand extends Command {
+    private final String tableName;
+    private final List<ColumnDef> columns;
+
+    public CreateTableCommand(String tableName, List<ColumnDef> columns) {
+        this.tableName = tableName;
+        this.columns = columns;
+    }
+
+    @Override
+    public String toString() {
+        return "CreateTableCommand{tableName='" + tableName + "', columns=" + columns + '}';
+    }
+}
