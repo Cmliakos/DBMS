@@ -5,6 +5,8 @@ public class CreateDatabaseCommand extends Command {
         this.databaseName = databaseName;
     }
 
+    public String getDatabaseName() { return databaseName; }
+
     @Override
     public String toString() {
         return "CreateDatabaseCommand{databaseName='" + databaseName + "'}";

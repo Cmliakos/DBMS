@@ -7,6 +7,9 @@ public class InputCommand extends Command {
         this.outputFile = outputFile;
     }
 
+    public String getInputFile() { return inputFile; }
+    public String getOutputFile() { return outputFile; }
+
     @Override
     public String toString() {
         return "InputCommand{inputFile='" + inputFile + "', outputFile='" + outputFile + "'}";

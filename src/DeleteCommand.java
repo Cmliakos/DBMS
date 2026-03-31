@@ -7,6 +7,9 @@ public class DeleteCommand extends Command {
         this.condition = condition;
     }
 
+    public String getTableName() { return tableName; }
+    public Condition getCondition() { return condition; }
+
     @Override
     public String toString() {
         return "DeleteCommand{tableName='" + tableName + "', condition=" + condition + "}";
