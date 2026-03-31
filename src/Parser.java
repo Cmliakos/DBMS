@@ -206,6 +206,34 @@ public class Parser {
         throw new RuntimeException("Expected literal value");
     }
 
+    private Command parseSelect() {
+        List<String> attrNames = new ArrayList<>();
+        do {
+            attrNames.add(expectIdentifier("Expected attribute name in SELECT"));
+            if (check(TokenType.COMMA)) {
+                advance();
+            } else {
+                break;
+            }
+        } while (true);
+        expectKeyword("FROM", "Expected 'FROM' after attribute list in SELECT");
+        List<String> tableNames = new ArrayList<>();
+        do {
+            tableNames.add(expectIdentifier("Expected table name in FROM clause"));
+            if (check(TokenType.COMMA)) {
+                advance();
+            } else {
+                break;
+            }
+        } while (true);
+        Condition condition = null;
+        if (matchKeyword("WHERE")) {
+            condition = parseCondition();
+        }
+        expect(TokenType.SEMICOLON, "Expected ';' after SELECT statement");
+        return new SelectCommand(attrNames, tableNames, condition);
+    }
+
     private Command parseRename() {
         String tableName = expectIdentifier("Expected table name after RENAME");
         expect(TokenType.LPAREN, "Expected '(' after table name in RENAME");
