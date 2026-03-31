@@ -166,6 +166,40 @@ public class Parser {
         throw new RuntimeException("Expected data type INT, STRING, or FLOAT");
     }
 
+    private Command parseInsert() {
+        String tableName = expectIdentifier("Expected table name after INSERT INTO");
+        expectKeyword("VALUES", "Expected 'VALUES' after table name in INSERT statement");
+        expect(TokenType.LPAREN, "Expected '(' after VALUES in INSERT statement")
+        
+        List<Value> values = new ArrayList<>()
+        
+        do {
+            values.add(parseValue());
+
+            if (check(TokenType.COMMA)) {
+                advance();
+            } else {
+                break;
+            }
+        } while (true);
+        expect(TokenType.RPAREN, "Expected ')' after value list in INSERT statement");
+        expect(TokenType.SEMICOLON, "Expected ';' after INSERT statement");
+        return new InsertCommand(tableName, values);
+    }
+
+    private Value parseValue() {
+        if (check(TokenType.INTEGER_LITERAL)) {
+            return new Value("INTEGER", advance().getValue());
+        }
+        if (check(TokenType.STRING_LITERAL)) {
+            return new Value("STRING", advance().getValue());
+        }
+        if (check(TokenType.FLOAT_LITERAL)) {
+            return new Value("FLOAT", advance().getValue());
+        }
+        throw new RuntimeException("Expected literal value");
+    }
+
     private Command parseExit() {
         expect(TokenType.SEMICOLON, "Expected ';' after EXIT");
         return new ExitCommand();
