@@ -25,7 +25,6 @@ public class RenameCommand extends Command {
             return;
         }
 
-        // Read the entire file into memory
         List<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(tableFile))) {
             String line;
@@ -37,20 +36,17 @@ public class RenameCommand extends Command {
             return;
         }
 
-        // Parse the column count from the header
         if (lines.isEmpty() || !lines.get(0).startsWith("COLUMNS")) {
             System.out.println("Error: Corrupt table file.");
             return;
         }
         int numColumns = Integer.parseInt(lines.get(0).split(" ")[1]);
 
-        // Validate new name count matches column count
         if (newAttrNames.size() != numColumns) {
             System.out.println("Error: RENAME expects " + numColumns + " attribute name(s), but got " + newAttrNames.size() + ".");
             return;
         }
 
-        // Replace column names in the header lines
         for (int i = 0; i < numColumns; i++) {
             String[] parts = lines.get(i + 1).split(" ");
             StringBuilder newLine = new StringBuilder();
@@ -62,7 +58,6 @@ public class RenameCommand extends Command {
             lines.set(i + 1, newLine.toString());
         }
 
-        // Write the modified file back
         try (PrintWriter writer = new PrintWriter(new FileWriter(tableFile))) {
             for (String line : lines) {
                 writer.println(line);
