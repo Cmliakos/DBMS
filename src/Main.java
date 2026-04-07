@@ -65,6 +65,11 @@ public class Main {
                     Parser parser = new Parser(tokens);
                     Command command = parser.parseStatement();
                     System.out.println("Parsed: " + command);
+                    if (command instanceof ExitCommand) {
+                        System.out.println("Exiting DBMS.");
+                        scanner.close();
+                        return;
+                    }
                     command.execute();
                 } catch (RuntimeException e) {
                     System.out.println("Error: " + e.getMessage());

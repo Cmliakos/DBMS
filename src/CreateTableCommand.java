@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.List;
 
 public class CreateTableCommand extends Command {
@@ -14,7 +15,29 @@ public class CreateTableCommand extends Command {
 
     @Override
     public void execute() {
-        System.out.println("Command not yet implemented.");
+        if (Main.currentDatabase == null) {
+            System.out.println("Error: No database selected. Use 'USE <dbname>;' first.");
+            return;
+        }
+        File tableFile = new File("../data/" + Main.currentDatabase + "/" + tableName + ".tbl");
+        if (tableFile.exists()) {
+            System.out.println("Error: Table '" + tableName + "' already exists.");
+            return;
+        }
+        try (PrintWriter writer = new PrintWriter(new FileWriter(tableFile))) {
+            writer.println("COLUMNS " + columns.size());
+            for (ColumnDef col : columns) {
+                if (col.isPrimaryKey()) {
+                    writer.println(col.getName() + " " + col.getType() + " PK");
+                } else {
+                    writer.println(col.getName() + " " + col.getType());
+                }
+            }
+            writer.println("DATA");
+            System.out.println("Table '" + tableName + "' created.");
+        } catch (IOException e) {
+            System.out.println("Error: Could not create table file: " + e.getMessage());
+        }
     }
 
     @Override
