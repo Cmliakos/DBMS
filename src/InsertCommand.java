@@ -27,9 +27,6 @@ public class InsertCommand extends Command {
             return;
         }
 
-        // ------------------------------------------------------------------
-        // 1. Read schema from the header
-        // ------------------------------------------------------------------
         List<String> colNames = new ArrayList<>();
         List<String> colTypes = new ArrayList<>();
         int pkIndex = -1;
@@ -59,19 +56,12 @@ public class InsertCommand extends Command {
             return;
         }
 
-        // ------------------------------------------------------------------
-        // 2. Arity check
-        // ------------------------------------------------------------------
         if (values.size() != colNames.size()) {
             System.out.println("Error: Expected " + colNames.size() +
                     " value(s) but got " + values.size() + ".");
             return;
         }
-
-        // ------------------------------------------------------------------
-        // 3. Domain constraint – value type must be compatible with column type
-        //    INTEGER fits FLOAT (widening); FLOAT does not fit INTEGER
-        // ------------------------------------------------------------------
+        
         for (int i = 0; i < colNames.size(); i++) {
             String colType  = colTypes.get(i);
             String valType  = values.get(i).getType().toUpperCase();
@@ -106,19 +96,12 @@ public class InsertCommand extends Command {
             }
         }
 
-        // ------------------------------------------------------------------
-        // 4. Entity integrity – primary key value must not be empty
-        //    (We represent NULL as empty string; reject it.)
-        // ------------------------------------------------------------------
         if (pkIndex >= 0 && values.get(pkIndex).getValue().isEmpty()) {
             System.out.println("Error: Entity integrity violation: primary key '" +
                     colNames.get(pkIndex) + "' cannot be null.");
             return;
         }
 
-        // ------------------------------------------------------------------
-        // 5. Key constraint – primary key must be unique (check BST)
-        // ------------------------------------------------------------------
         File indexFile = new File("../data/" + Main.currentDatabase + "/" + tableName + ".idx");
         BST bst = null;
         if (pkIndex >= 0) {
@@ -136,9 +119,6 @@ public class InsertCommand extends Command {
             }
         }
 
-        // ------------------------------------------------------------------
-        // 6. Build the record string  (pipe-delimited)
-        // ------------------------------------------------------------------
         StringBuilder recordBuilder = new StringBuilder();
         for (int i = 0; i < values.size(); i++) {
             if (i > 0) recordBuilder.append("|");
@@ -146,9 +126,6 @@ public class InsertCommand extends Command {
         }
         String record = recordBuilder.toString();
 
-        // ------------------------------------------------------------------
-        // 7. Append record to the table file; capture byte offset first
-        // ------------------------------------------------------------------
         long offset = tableFile.length();
         try (RandomAccessFile raf = new RandomAccessFile(tableFile, "rw")) {
             raf.seek(raf.length());
@@ -158,9 +135,6 @@ public class InsertCommand extends Command {
             return;
         }
 
-        // ------------------------------------------------------------------
-        // 8. Update and save BST index
-        // ------------------------------------------------------------------
         if (pkIndex >= 0 && bst != null) {
             bst.insert(values.get(pkIndex).getValue(), offset);
             try {
