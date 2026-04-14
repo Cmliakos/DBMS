@@ -21,7 +21,7 @@ public class InsertCommand extends Command {
             return;
         }
 
-        File tableFile = new File("../data/" + Main.currentDatabase + "/" + tableName + ".tbl");
+        File tableFile = new File("data/" + Main.currentDatabase + "/" + tableName + ".tbl");
         if (!tableFile.exists()) {
             System.out.println("Error: Table '" + tableName + "' does not exist.");
             return;
