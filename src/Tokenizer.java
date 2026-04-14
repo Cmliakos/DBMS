@@ -123,10 +123,11 @@ public class Tokenizer {
                 }
             }
 
-            // Numbers
-            if (Character.isDigit(current)) {
+            if (Character.isDigit(current) ||
+                    (current == '-' && pos + 1 < input.length() && Character.isDigit(input.charAt(pos + 1)))) {
                 int start = pos;
                 boolean hasDot = false;
+                if (current == '-') pos++;
 
                 while (pos < input.length()) {
                     char c = input.charAt(pos);
