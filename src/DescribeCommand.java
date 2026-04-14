@@ -19,7 +19,7 @@ public class DescribeCommand extends Command {
             System.out.println("Error: No database selected. Use 'USE <dbname>;' first.");
             return;
         }
-        File dbDir = new File("../data/" + Main.currentDatabase);
+        File dbDir = new File("data/" + Main.currentDatabase);
         if (describeAll) {
             File[] tableFiles = dbDir.listFiles((dir, name) -> name.endsWith(".tbl"));
             if (tableFiles == null || tableFiles.length == 0) {
