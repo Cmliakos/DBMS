@@ -15,7 +15,7 @@ public class Main {
     public static Scanner scanner;
 
     // Session file to store the current database name across runs
-    private static final File SESSION_FILE = new File("../data/.session");
+    private static final File SESSION_FILE = new File("data/.session");
 
     // Load the last used database from the session file, if it exists
     private static void loadSession() {
@@ -26,7 +26,7 @@ public class Main {
             String db = r.readLine();
             // 
             if (db != null && !db.isBlank()) {
-                File dbDir = new File("../data/" + db.trim());
+                File dbDir = new File("data/" + db.trim());
                 if (dbDir.exists() && dbDir.isDirectory()) {
                     currentDatabase = db.trim();
                     // Inform the user that the session has been restored
