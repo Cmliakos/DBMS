@@ -11,7 +11,7 @@ public class CreateDatabaseCommand extends Command {
 
     @Override
     public void execute() {
-        File databaseDirectory = new File("../data/" + databaseName);
+        File databaseDirectory = new File("data/" + databaseName);
 
         // handle if file exists
         if (databaseDirectory.exists()) {
