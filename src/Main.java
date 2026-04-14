@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class Main {
 
     public static String currentDatabase = null;
+    public static Scanner scanner;
 
         private static final File SESSION_FILE = new File("../data/.session");
 
@@ -42,7 +43,7 @@ public class Main {
 
     public static void main(String[] args) {
         loadSession();
-        Scanner scanner = new Scanner(System.in); //no need to close, handled in exit class
+        scanner = new Scanner(System.in);
         StringBuilder buffer = new StringBuilder();
 
         System.out.println("DBMS started. Type EXIT; to quit.");
