@@ -19,7 +19,7 @@ public class RenameCommand extends Command {
             System.out.println("Error: No database selected. Use 'USE <dbname>;' first.");
             return;
         }
-        File tableFile = new File("../data/" + Main.currentDatabase + "/" + tableName + ".tbl");
+        File tableFile = new File("data/" + Main.currentDatabase + "/" + tableName + ".tbl");
         if (!tableFile.exists()) {
             System.out.println("Error: Table '" + tableName + "' does not exist.");
             return;
