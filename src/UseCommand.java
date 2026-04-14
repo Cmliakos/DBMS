@@ -13,7 +13,7 @@ public class UseCommand extends Command {
     @Override
     public void execute() {
         // check if directory exists then set currentDatabase if it does
-        File dbDirectory = new File("../data/" + databaseName);
+        File dbDirectory = new File("data/" + databaseName);
         if (dbDirectory.exists() && dbDirectory.isDirectory()) {
             Main.currentDatabase = databaseName;
             System.out.println("Using database '" + databaseName + "'.");
